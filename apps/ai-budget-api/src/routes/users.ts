@@ -1,5 +1,5 @@
+import { prisma } from '@ai-budget-api/prisma';
 import express from 'express';
-import prisma from '../config/db';
 
 export const usersRouter = express.Router();
 
