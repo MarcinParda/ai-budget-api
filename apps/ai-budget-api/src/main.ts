@@ -14,7 +14,7 @@ app.use(passport.initialize());
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 app.get('/api', (req, res) => {
-  res.send({ message: 'Welcome to ai-budget-api!' });
+  res.send({ message: 'OK' });
 });
 app.use('/api/users', usersRouter);
 app.use('/api/register', registerRouter);
@@ -23,7 +23,7 @@ app.get('/api/protected', jwtAuth, (req, res) => {
   res.json({ message: 'This is a protected route' });
 });
 
-const port = process.env.PORT || 3333;
+const port = process.env.PORT || 8000;
 const server = app.listen(port, () => {
   console.log(`Listening at http://localhost:${port}/api`);
 });

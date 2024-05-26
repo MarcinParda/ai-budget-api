@@ -1,6 +1,7 @@
 import { prisma } from '@ai-budget-api/prisma';
 import express from 'express';
 import bcrypt from 'bcrypt';
+import { errorHandler } from '../utils/errors/errorHandler';
 
 export const registerRouter = express.Router();
 
@@ -18,9 +19,7 @@ registerRouter.post('/', async (req, res) => {
     });
 
     res.status(201).json({ message: 'User registered successfully' });
-  } catch (err) {
-    res
-      .status(500)
-      .json({ message: 'Error registering user', error: err.message });
+  } catch (err: unknown) {
+    errorHandler(err, req, res);
   }
 });
