@@ -1,0 +1,56 @@
+{
+  "name": "prisma",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/prisma/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/prisma",
+        "main": "libs/prisma/src/index.ts",
+        "tsConfig": "libs/prisma/tsconfig.lib.json",
+        "assets": ["libs/prisma/*.md"]
+      }
+    },
+    "prisma": {
+      "command": "prisma",
+      "options": {
+        "cwd": "libs/prisma"
+      }
+    },
+    "generate-types": {
+      "command": "prisma generate",
+      "options": {
+        "cwd": "libs/prisma"
+      }
+    },
+    "migrate": {
+      "command": "prisma migrate dev",
+      "options": {
+        "cwd": "libs/prisma"
+      }
+    },
+    "studio": {
+      "command": "prisma studio",
+      "options": {
+        "cwd": "libs/prisma"
+      }
+    },
+    "seed": {
+      "command": "ts-node ./libs/prisma/scripts/seed.ts"
+    },
+    "clear": {
+      "command": "ts-node ./libs/prisma/scripts/clear.ts"
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/prisma/**/*.ts"]
+      }
+    }
+  }
+}
