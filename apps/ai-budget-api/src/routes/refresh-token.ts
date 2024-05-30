@@ -20,11 +20,7 @@ refreshTokenRouter.post('/', async (req, res) => {
       throw new CustomError('Refresh token is required', 401);
     }
 
-    const decoded = jwt.verify(
-      refreshToken,
-      process.env.REFRESH_ACCESS_TOKEN_SECRET
-    );
-
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
     if (!isValidDecodedToken(decoded)) {
       throw new CustomError('Invalid refresh token', 401);
     }
@@ -32,7 +28,6 @@ refreshTokenRouter.post('/', async (req, res) => {
     const storedRefreshToken = await prisma.refreshToken.findUnique({
       where: { refreshToken },
     });
-
     if (!storedRefreshToken || storedRefreshToken.expiresAt < new Date()) {
       throw new CustomError('Refresh token is invalid or expired', 401);
     }
@@ -40,6 +35,7 @@ refreshTokenRouter.post('/', async (req, res) => {
     const user = await prisma.user.findUnique({
       where: { id: decoded.userId },
     });
+    
     const accessToken = jwt.sign(
       { userId: user.id },
       process.env.ACCESS_TOKEN_SECRET,

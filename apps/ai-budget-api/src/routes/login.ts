@@ -36,7 +36,7 @@ loginRouter.post('/', (req, res, next) => {
         );
         const refreshToken = jwt.sign(
           { userId: user.id },
-          process.env.REFRESH_ACCESS_TOKEN_SECRET,
+          process.env.REFRESH_TOKEN_SECRET,
           {
             expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN,
           }
