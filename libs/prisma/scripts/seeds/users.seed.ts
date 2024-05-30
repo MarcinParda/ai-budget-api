@@ -1,6 +1,6 @@
 import { prisma } from '../../src';
 import { faker } from '@faker-js/faker';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 
 export async function seedUsers(numUsers: number) {
   const testPassword = await bcrypt.hash('test', 10);

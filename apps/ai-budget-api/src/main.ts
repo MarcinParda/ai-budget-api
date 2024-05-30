@@ -5,6 +5,7 @@ import passport from './config/passport';
 import { jwtAuth } from './middlewares/jwtAuth';
 import { registerRouter } from './routes/register';
 import { loginRouter } from './routes/login';
+import { refreshTokenRouter } from './routes/refresh-token';
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.get('/api', (req, res) => {
 app.use('/api/users', usersRouter);
 app.use('/api/register', registerRouter);
 app.use('/api/login', loginRouter);
+app.use('/api/refresh-token', refreshTokenRouter);
 app.get('/api/protected', jwtAuth, (req, res) => {
   res.json({ message: 'This is a protected route' });
 });
