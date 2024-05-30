@@ -6,9 +6,11 @@ import jwt from 'jsonwebtoken';
 
 export const refreshTokenRouter = express.Router();
 
-const isValidDecodedToken = (decoded: unknown): decoded is { userId: string } => {
+const isValidDecodedToken = (
+  decoded: unknown
+): decoded is { userId: string } => {
   return typeof decoded === 'object' && decoded !== null && 'userId' in decoded;
-}
+};
 
 refreshTokenRouter.post('/', async (req, res) => {
   try {
@@ -18,12 +20,15 @@ refreshTokenRouter.post('/', async (req, res) => {
       throw new CustomError('Refresh token is required', 401);
     }
 
-    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const decoded = jwt.verify(
+      refreshToken,
+      process.env.REFRESH_ACCESS_TOKEN_SECRET
+    );
 
     if (!isValidDecodedToken(decoded)) {
       throw new CustomError('Invalid refresh token', 401);
     }
-      
+
     const storedRefreshToken = await prisma.refreshToken.findUnique({
       where: { refreshToken },
     });
@@ -38,7 +43,7 @@ refreshTokenRouter.post('/', async (req, res) => {
     const accessToken = jwt.sign(
       { userId: user.id },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN }
+      { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN }
     );
 
     return res.json({ accessToken });

@@ -17,8 +17,6 @@ loginRouter.post('/', (req, res, next) => {
         errorHandler(err, req, res);
       }
 
-      console.log(user);
-
       if (!user) {
         const error = new CustomError('Invalid email or password', 400);
         errorHandler(error, req, res);
@@ -29,12 +27,16 @@ loginRouter.post('/', (req, res, next) => {
           errorHandler(err, req, res);
         }
 
-        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-          expiresIn: process.env.JWT_EXPIRES_IN,
-        });
+        const accessToken = jwt.sign(
+          { userId: user.id },
+          process.env.ACCESS_TOKEN_SECRET,
+          {
+            expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN,
+          }
+        );
         const refreshToken = jwt.sign(
           { userId: user.id },
-          process.env.REFRESH_TOKEN_SECRET,
+          process.env.REFRESH_ACCESS_TOKEN_SECRET,
           {
             expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN,
           }
@@ -45,12 +47,12 @@ loginRouter.post('/', (req, res, next) => {
             userId: user.id,
             refreshToken,
             expiresAt: new Date(
-              Date.now() + process.env.REFRESH_TOKEN_EXPIRES_IN_MS
+              Date.now() + Number(process.env.REFRESH_TOKEN_EXPIRES_IN_MS)
             ),
           },
         });
 
-        return res.json({ token });
+        return res.json({ accessToken, refreshToken });
       });
     }
   )(req, res, next);

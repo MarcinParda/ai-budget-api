@@ -1,18 +1,18 @@
 import jwt from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express-serve-static-core';
 import { errorHandler } from '../utils/errors/errorHandler';
+import CustomError from '../utils/errors/customError';
 
 export const jwtAuth = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.headers.authorization;
-  if (!token) {
-    const err = new Error('Authorization token missing');
-    errorHandler(err, req, res);
+  const accessToken = req.headers.authorization;
+  if (!accessToken) {
+    const error = new CustomError('Authorization header is missing', 401);
+    errorHandler(error, req, res);
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err) => {
+  jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err) => {
     if (err) {
       errorHandler(err, req, res);
-      // return res.status(403).json({ message: 'Failed to authenticate token' });
     }
     next();
   });
