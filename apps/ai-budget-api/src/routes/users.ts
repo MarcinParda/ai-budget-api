@@ -1,5 +1,7 @@
 import { prisma } from '@ai-budget-api/prisma';
 import express from 'express';
+import { errorHandler } from '../utils/errors/errorHandler';
+import CustomError from '../utils/errors/customError';
 
 export const usersRouter = express.Router();
 
@@ -9,8 +11,7 @@ usersRouter.get('/', async (req, res) => {
     const users = await prisma.user.findMany();
     res.json(users);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Internal Server Error' });
+    errorHandler(err, req, res);
   }
 });
 
@@ -21,11 +22,11 @@ usersRouter.get('/:id', async (req, res) => {
       where: { id: req.params.id },
     });
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      const error = new CustomError('User not found', 404);
+      errorHandler(error, req, res);
     }
     res.json(user);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Internal Server Error' });
+    errorHandler(err, req, res);
   }
 });
