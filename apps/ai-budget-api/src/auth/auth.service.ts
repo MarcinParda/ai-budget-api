@@ -3,15 +3,13 @@ import jwt from 'jsonwebtoken';
 import * as authRepository from './auth.repository';
 import * as userRepository from '../user/user.repository';
 import { errorHandler } from '../utils/errors/errorHandler';
-import passport from '../config/passport';
+import passport from './passport';
 import { User } from '@prisma/client';
 import { NextFunction, Request, Response } from 'express';
 
-function isValidDecodedToken(
-  decoded: unknown
-): decoded is { userId: string } {
+function isValidDecodedToken(decoded: unknown): decoded is { userId: string } {
   return typeof decoded === 'object' && decoded !== null && 'userId' in decoded;
-};
+}
 
 export async function refreshToken(refreshToken: string) {
   const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
@@ -69,9 +67,14 @@ export async function login(req: Request, res: Response, next: NextFunction) {
           }
         );
 
-        const refreshTokenExpiresAt =
-          new Date(Date.now() + Number(process.env.REFRESH_TOKEN_EXPIRES_IN_MS));
-        await authRepository.insertRefreshToken(user.id, refreshToken, refreshTokenExpiresAt);
+        const refreshTokenExpiresAt = new Date(
+          Date.now() + Number(process.env.REFRESH_TOKEN_EXPIRES_IN_MS)
+        );
+        await authRepository.insertRefreshToken(
+          user.id,
+          refreshToken,
+          refreshTokenExpiresAt
+        );
 
         return res.json({ accessToken, refreshToken });
       });

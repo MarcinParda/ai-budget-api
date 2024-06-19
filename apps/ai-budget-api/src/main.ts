@@ -1,11 +1,9 @@
 import express from 'express';
 import * as path from 'path';
 import { usersRouter } from './routes/users';
-import passport from './config/passport';
-import { jwtAuth } from './middlewares/jwtAuth';
-import { loginRouter } from './routes/login';
-import { refreshTokenRouter } from './routes/refresh-token';
+import passport from './auth/passport';
 import { authRouter } from './auth/auth.router';
+import { jwtAuthMiddleware } from './auth/jwt-auth.middleware';
 
 const app = express();
 
@@ -19,9 +17,7 @@ app.get('/api', (req, res) => {
 });
 app.use('/api/users', usersRouter);
 app.use('/api/auth', authRouter);
-app.use('/api/login', loginRouter);
-app.use('/api/refresh-token', refreshTokenRouter);
-app.get('/api/protected', jwtAuth, (req, res) => {
+app.get('/api/protected', jwtAuthMiddleware, (req, res) => {
   res.json({ message: 'This is a protected route' });
 });
 

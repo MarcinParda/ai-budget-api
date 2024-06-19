@@ -3,7 +3,11 @@ import { NextFunction, Request, Response } from 'express-serve-static-core';
 import { errorHandler } from '../utils/errors/errorHandler';
 import CustomError from '../utils/errors/customError';
 
-export const jwtAuth = (req: Request, res: Response, next: NextFunction) => {
+export function jwtAuthMiddleware(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   const accessToken = req.headers.authorization;
   if (!accessToken) {
     const error = new CustomError('Authorization header is missing', 401);
@@ -16,4 +20,4 @@ export const jwtAuth = (req: Request, res: Response, next: NextFunction) => {
     }
     next();
   });
-};
+}
