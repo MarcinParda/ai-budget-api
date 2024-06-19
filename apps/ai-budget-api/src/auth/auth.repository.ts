@@ -5,3 +5,17 @@ export function getRefreshToken(refreshToken: string) {
     where: { refreshToken },
   });
 }
+
+export function insertRefreshToken(
+  userId: string,
+  refreshToken: string,
+  expiresAt: Date
+) {
+  return prisma.refreshToken.create({
+    data: {
+      userId,
+      refreshToken,
+      expiresAt,
+    },
+  });
+}
