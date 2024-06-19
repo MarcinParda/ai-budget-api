@@ -1,7 +1,7 @@
 import { prisma } from '@ai-budget-api/prisma';
 import express from 'express';
-import { errorHandler } from '../utils/errors/errorHandler';
-import CustomError from '../utils/errors/customError';
+import { errorHandler } from '../../utils/errors/errorHandler';
+import CustomError from '../../utils/errors/customError';
 
 export const usersRouter = express.Router();
 

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express-serve-static-core';
-import { errorHandler } from '../utils/errors/errorHandler';
-import CustomError from '../utils/errors/customError';
+import CustomError from '../../utils/errors/customError';
+import { errorHandler } from '../../utils/errors/errorHandler';
 
 export function jwtAuthMiddleware(
   req: Request,

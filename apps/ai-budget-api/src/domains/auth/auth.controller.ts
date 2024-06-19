@@ -1,18 +1,17 @@
 import { NextFunction, Request, Response } from 'express';
-import { errorHandler } from '../utils/errors/errorHandler';
 import * as userService from '../user/user.service';
 import * as authService from './auth.service';
-import CustomError from '../utils/errors/customError';
+import CustomError from '../../utils/errors/customError';
+import { errorHandler } from '../../utils/errors/errorHandler';
 
 export async function register(req: Request, res: Response) {
   try {
     const { username, email, password } = req.body;
     if (!username || !email || !password) {
-      const error = new CustomError(
+      throw new CustomError(
         'Username, email, and password are required',
         400
       );
-      errorHandler(error, req, res);
     }
 
     await userService.register(username, email, password);
@@ -27,8 +26,7 @@ export async function refreshToken(req: Request, res: Response) {
   try {
     const { refreshToken } = req.body;
     if (!refreshToken) {
-      const error = new CustomError('Refresh token is required', 401);
-      errorHandler(error, req, res);
+      throw new CustomError('Refresh token is required', 401);
     }
 
     const accessToken = await authService.refreshToken(refreshToken);
@@ -46,4 +44,3 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     errorHandler(err, req, res);
   }
 }
-

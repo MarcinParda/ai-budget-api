@@ -14,6 +14,10 @@ export async function insert(
   });
 }
 
+export async function getAllUsers() {
+  return prisma.user.findMany();
+}
+
 export async function getUserById(id: string) {
   return prisma.user.findUnique({
     where: { id },

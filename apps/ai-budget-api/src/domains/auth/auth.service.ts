@@ -1,11 +1,11 @@
-import CustomError from '../utils/errors/customError';
 import jwt from 'jsonwebtoken';
 import * as authRepository from './auth.repository';
 import * as userRepository from '../user/user.repository';
-import { errorHandler } from '../utils/errors/errorHandler';
 import passport from './passport';
 import { User } from '@prisma/client';
 import { NextFunction, Request, Response } from 'express';
+import CustomError from '../../utils/errors/customError';
+import { errorHandler } from '../../utils/errors/errorHandler';
 
 function isValidDecodedToken(decoded: unknown): decoded is { userId: string } {
   return typeof decoded === 'object' && decoded !== null && 'userId' in decoded;
