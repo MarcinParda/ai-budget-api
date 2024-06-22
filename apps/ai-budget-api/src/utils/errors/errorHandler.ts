@@ -7,6 +7,8 @@ import {
 } from './errorPredicates';
 import { handlePrismaError } from './handlePrismaError';
 import { handleJWTError, handleJWTExpiredError } from './handleAuthError';
+import { ZodError } from 'zod';
+import CustomError from './customError';
 
 const sendErrorDev = (err: UnknownError, req: Request, res: Response) => {
   if (req.originalUrl.startsWith('/api')) {
@@ -61,6 +63,13 @@ export const errorHandler = (err: unknown, req: Request, res: Response) => {
   let error = { ...unknownError };
   error.message = unknownError.message;
 
+  if (error instanceof ZodError) {
+    const errorMessage = error.errors.map(
+      (issue: any) => `${issue.path.join('.')} is ${issue.message}`
+    ).join(', ');
+    error = new CustomError(errorMessage, 400);
+
+  }
   if (isPrismaError(unknownError)) {
     error = handlePrismaError(unknownError);
   }
