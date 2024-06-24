@@ -1,4 +1,5 @@
 import { prisma } from '@ai-budget-api/prisma';
+import { UserSchema, UsersArraySchema } from './user.schemas';
 
 export async function insert(
   username: string,
@@ -15,11 +16,22 @@ export async function insert(
 }
 
 export async function getAllUsers() {
-  return prisma.user.findMany();
+  const users = await prisma.user.findMany();
+  return UsersArraySchema.parse(users).map((user) => ({
+    id: user.id,
+    username: user.username,
+    email: user.email,
+  }));
 }
 
 export async function getUserById(id: string) {
-  return prisma.user.findUnique({
+  const user = await prisma.user.findUnique({
     where: { id },
+  });
+  if (!user) return null;
+  return UserSchema.parse({
+    id: user.id,
+    username: user.username,
+    email: user.email,
   });
 }

@@ -65,8 +65,8 @@ export const errorHandler = (err: unknown, req: Request, res: Response) => {
 
   if (err instanceof ZodError) {
     const errorMessage = err.errors
-      .map((issue: any) => `${issue.path.join('.')} is ${issue.message}`)
-      .join('. ');
+      .map((issue) => issue.message)
+      .join('\n');
     error = new CustomError(errorMessage, 400);
   }
   if (isPrismaError(unknownError)) {

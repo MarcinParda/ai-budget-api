@@ -13,3 +13,17 @@ export const registerSchema = z.object({
     .min(8, 'Password must be at least 8 characters')
     .max(255, 'Password must be at most 255 characters'),
 });
+
+export const loginSchema = z.object({
+  email: z
+    .string({ message: 'Email must be a string' })
+    .email('Invalid email format. Please provide a valid email address'),
+  password: z
+    .string({ message: 'Password must be a string' })
+    .min(8, 'Password must be at least 8 characters')
+    .max(255, 'Password must be at most 255 characters'),
+});
+
+export const refreshTokenSchema = z.object({
+  refreshToken: z.string({ message: 'Refresh token must be a string' }),
+});
