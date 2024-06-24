@@ -8,6 +8,7 @@ export function validateData(schema: z.ZodObject<any, any>) {
       schema.parse(req.body);
       next();
     } catch (error) {
+      console.log('Catch error in validateData middleware');
       errorHandler(error, req, res);
     }
   };
