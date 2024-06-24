@@ -55,7 +55,7 @@ const sendErrorProd = (err: UnknownError, req: Request, res: Response) => {
     .json({ status: ' error', message: 'Something went wrong' });
 };
 
-export const errorHandler = (err: unknown, req: Request, res: Response) => {
+export const handleError = (err: unknown, req: Request, res: Response) => {
   const unknownError = err as UnknownError;
   unknownError.statusCode = unknownError.statusCode || 500;
   unknownError.status = unknownError.status || 'error';
@@ -64,9 +64,7 @@ export const errorHandler = (err: unknown, req: Request, res: Response) => {
   error.message = unknownError.message;
 
   if (err instanceof ZodError) {
-    const errorMessage = err.errors
-      .map((issue) => issue.message)
-      .join('\n');
+    const errorMessage = err.errors.map((issue) => issue.message).join('\n');
     error = new CustomError(errorMessage, 400);
   }
   if (isPrismaError(unknownError)) {

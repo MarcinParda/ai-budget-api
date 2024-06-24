@@ -5,7 +5,6 @@ import passport from './passport';
 import { User } from '@prisma/client';
 import { NextFunction, Request, Response } from 'express';
 import CustomError from '../../utils/errors/customError';
-import { errorHandler } from '../../utils/errors/errorHandler';
 
 function isValidDecodedToken(decoded: unknown): decoded is { userId: string } {
   return typeof decoded === 'object' && decoded !== null && 'userId' in decoded;
@@ -39,17 +38,17 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     { session: false },
     (err: unknown, user: User) => {
       if (err) {
-        errorHandler(err, req, res);
+        next(err);
       }
 
       if (!user) {
         const error = new CustomError('Invalid email or password', 400);
-        errorHandler(error, req, res);
+        next(error);
       }
 
       req.login(user, { session: false }, async (err) => {
         if (err) {
-          errorHandler(err, req, res);
+          next(err);
         }
 
         const accessToken = jwt.sign(

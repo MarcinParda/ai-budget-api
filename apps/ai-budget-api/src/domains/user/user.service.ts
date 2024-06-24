@@ -16,11 +16,9 @@ export async function getAllUsers() {
 }
 
 export async function getUserById(id: string) {
-  const user = userRepository.getUserById(id);
-
+  const user = await userRepository.getUserById(id);
   if (!user) {
-    const error = new CustomError('User not found', 404);
-    throw error;
+    throw new CustomError('User not found', 404);
   }
   return user;
 }
