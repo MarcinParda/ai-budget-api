@@ -75,7 +75,14 @@ export async function login(req: Request, res: Response, next: NextFunction) {
           refreshTokenExpiresAt
         );
 
-        return res.json({ accessToken, refreshToken });
+        res.cookie('refreshToken', refreshToken, {
+          httpOnly: true,
+          secure: true,
+          sameSite: 'strict',
+          expires: refreshTokenExpiresAt,
+        });
+
+        return res.json({ accessToken });
       });
     }
   )(req, res, next);
