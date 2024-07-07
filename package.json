@@ -2,7 +2,14 @@
   "name": "@ai-budget-api/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build": "nx run ai-budget-api:build",
+    "serve": "nx run ai-budget-api:serve --skip-nx-cache",
+    "test": "nx run ai-budget-api:test",
+    "lint": "nx run ai-budget-api:lint",
+    "e2e": "nx run ai-budget-api:e2e",
+    "generate-types": "nx run prisma:generate-types"
+  },
   "private": true,
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
@@ -54,6 +61,7 @@
     "react-refresh": "^0.10.0",
     "ts-jest": "^29.1.0",
     "ts-node": "10.9.1",
+    "ts-node-dev": "^2.0.0",
     "typescript": "~5.4.2",
     "vite": "~5.0.0",
     "vite-plugin-dts": "~3.8.1",
