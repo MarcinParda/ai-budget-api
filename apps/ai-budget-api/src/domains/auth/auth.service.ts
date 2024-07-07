@@ -82,7 +82,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
           expires: refreshTokenExpiresAt,
         });
 
-        return res.json({ accessToken });
+        return res.json({ token: accessToken });
       });
     }
   )(req, res, next);
