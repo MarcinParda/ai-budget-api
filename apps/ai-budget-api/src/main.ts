@@ -5,11 +5,18 @@ import { authRouter } from './domains/auth/auth.router';
 import { jwtAuthMiddleware } from './domains/auth/jwt-auth.middleware';
 import { usersRouter } from './domains/user/user.router';
 import { handleError } from './utils/errors/handleError';
+import cors from 'cors';
 
 const app = express();
 
 app.use(express.json());
 app.use(passport.initialize());
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  })
+);
 
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
